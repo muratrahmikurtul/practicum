@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity >=0.7.0 <0.9.0;
+
+contract EtherStore { //0x7C537A2591bCAFfB372010105118e09e4EB96b89
+    address public owner;
+    uint256 public balance;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    receive() payable external {
+        balance += msg.value;
+    }
+    
+    
+    function withdraw(uint amount, address payable receiver) public {
+        require(msg.sender == owner, "Only Owner can do that");
+        require(amount <= balance, "Contract does not have ETH as much as 'amount'");
+        
+        receiver.transfer(amount);
+        balance -= amount;
+    }
+}
